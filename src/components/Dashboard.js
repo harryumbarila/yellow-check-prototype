@@ -1,68 +1,78 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import MenuHamburger from './MenuHamburger';
+import Breadcrumbs from './Breadcrumbs';
 
 const Dashboard = () => {
-  const navigate = useNavigate();
+  // Fake transactions
+  const fakeTransactions = Array.from({ length: 10 }, (_, index) => ({
+    id: index + 1,
+    merchant: `Merchant ${index + 1}`,
+    date: `2023-12-${(index % 30) + 1}`,
+    amount: (Math.random() * 1000).toFixed(2),
+    type: index % 2 === 0 ? 'Debit' : 'Credit',
+    status: index % 3 === 0 ? 'Pending' : index % 3 === 1 ? 'Executed' : 'Cancelled',
+  }));
 
-  const transactions = [
-    { id: 1, merchantName: 'Merchant A', cardLast4: '1234', amount: 150, reason: 'Terminal purchase', type: 'Debit' },
-    { id: 2, merchantName: 'Merchant B', cardLast4: '5678', amount: -100, reason: 'Fee reimbursement', type: 'Credit' },
-    { id: 3, merchantName: 'Merchant C', cardLast4: '6789', amount: 300, reason: 'Risk adjustment', type: 'Debit' },
-    { id: 4, merchantName: 'Merchant D', cardLast4: '1234', amount: -50, reason: 'Billing correction', type: 'Credit' },
-  ];
-  
+  const openTransactionDetails = (tx) => {
+    alert(`
+      Transaction Details:
+      - ID: ${tx.id}
+      - Merchant: ${tx.merchant}
+      - Date: ${tx.date}
+      - Amount: $${tx.amount}
+      - Type: ${tx.type}
+      - Status: ${tx.status}
+      - Agent: ${tx.type === 'Credit' ? 'Automatic Rule' : 'Manual'}
+    `);
+  };
 
   return (
-    <div style={{ backgroundColor: '#F7F9FC', height: '100vh' }}>
+    <div style={{ marginLeft: '60px', padding: '20px', backgroundColor: '#F7F9FC', minHeight: '100vh' }}>
       <MenuHamburger />
-      <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#375A7F', padding: '10px 20px', color: 'white' }}>
+      <Breadcrumbs />
+
+      <header style={{ backgroundColor: '#375A7F', padding: '20px', color: 'white', borderRadius: '8px', marginBottom: '20px' }}>
         <h1>Dashboard</h1>
-        <img src="/logout.png" alt="Logout" style={{ height: '30px', cursor: 'pointer' }} onClick={() => navigate('/')} />
       </header>
-      <div style={{ padding: '20px' }}>
-        <button
-          style={{
-            backgroundColor: '#4A90E2',
-            padding: '10px',
-            border: 'none',
-            borderRadius: '5px',
-            color: 'white',
-            marginBottom: '20px',
-            cursor: 'pointer',
-          }}
-          onClick={() => navigate('/adjustments')}
-        >
-          Create Transfer
-        </button>
-        <h2>Today's Transactions</h2>
-        <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
+
+      {/* Transaction Summary*/}
+      <section style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+        <h2>Transaction Summary (Today)</h2>
+        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center' }}>
           <thead>
             <tr style={{ backgroundColor: '#375A7F', color: 'white' }}>
+              <th>ID</th>
               <th>Merchant</th>
-              <th>Last 4 Digits</th>
+              <th>Date</th>
               <th>Amount</th>
-              <th>Reason</th>
-              <th>Action</th>
+              <th>Type</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
-            {transactions.map((transaction) => (
-              <tr key={transaction.id} style={{ backgroundColor: 'white', borderBottom: '1px solid #ddd' }}>
-                <td>{transaction.merchantName}</td>
-                <td>{transaction.cardLast4}</td>
-                <td>${transaction.amount.toFixed(2)}</td>
-                <td>{transaction.reason}</td>
-                <td>
-                  <button style={{ backgroundColor: '#4A90E2', color: 'white', border: 'none', padding: '5px', borderRadius: '5px', cursor: 'pointer' }}>
-                    Details
-                  </button>
+            {fakeTransactions.map((tx) => (
+              <tr key={tx.id} style={{ borderBottom: '1px solid #ddd' }}>
+                <td>{tx.id}</td>
+                <td>{tx.merchant}</td>
+                <td>{tx.date}</td>
+                <td>${tx.amount}</td>
+                <td>{tx.type}</td>
+                <td
+                  style={{
+                    color: '#375A7F',
+                    cursor: 'pointer',
+                    fontWeight: 'bold',
+                    textDecoration: 'underline',
+                  }}
+                  onClick={() => openTransactionDetails(tx)}
+                >
+                  {tx.status}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      </div>
+      </section>
     </div>
   );
 };
