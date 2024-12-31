@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/yellow-check-prototype/static/js/main.f383212f.js",
+    "main.js": "/yellow-check-prototype/static/js/main.f91752da.js",
     "index.html": "/yellow-check-prototype/index.html",
-    "main.f383212f.js.map": "/yellow-check-prototype/static/js/main.f383212f.js.map"
+    "main.f91752da.js.map": "/yellow-check-prototype/static/js/main.f91752da.js.map"
   },
   "entrypoints": [
-    "static/js/main.f383212f.js"
+    "static/js/main.f91752da.js"
   ]
 }
